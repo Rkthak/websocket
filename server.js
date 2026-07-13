@@ -19,7 +19,9 @@ wss.on("connection", (socket) => {
   //  broadcast
   socket.on("message", (message) => {
     wss.clients.forEach((client) => {
-      client.send(message.toString());
+      if (client !== socket) {
+        client.send(message.toString());
+      }
     });
   });
 });
