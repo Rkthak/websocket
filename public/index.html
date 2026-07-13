@@ -9,13 +9,24 @@
   <body>
     <h1>Chat App</h1>
 
+    <div class="">
+      <input type="text" id="message" placeholder="Enter message" />
+      <button id="send">Send</button> &nbsp;
+    </div>
+
     <script>
       const socket = new WebSocket("ws://localhost:3000");
 
+      const send = document.getElementById("send");
+
       socket.onopen = () => {
         console.log("connected");
-        socket.send("hello server");
       };
+
+      send.addEventListener("click", () => {
+        const message = document.getElementById("message");
+        socket.send(message.value);
+      });
 
       socket.onmessage = (event) => {
         console.log(event.data);
