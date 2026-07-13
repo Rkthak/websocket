@@ -1,0 +1,21 @@
+{
+  "name": "websocket",
+  "version": "1.0.0",
+  "description": "chat app and countinous server client connection",
+  "keywords": [
+    "websocket",
+    "chatApp"
+  ],
+  "license": "ISC",
+  "author": "Raj Kumar",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "ws": "^8.21.0"
+  }
+}
