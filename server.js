@@ -16,12 +16,11 @@ const wss = new webSocket.Server({ server });
 
 // connect client
 wss.on("connection", (socket) => {
-  console.log("new client connected");
-
-  socket.send("hello client");
-
+  //  broadcast
   socket.on("message", (message) => {
-    console.log(message.toString());
+    wss.clients.forEach((client) => {
+      client.send(message.toString());
+    });
   });
 });
 

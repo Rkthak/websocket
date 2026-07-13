@@ -5,3 +5,7 @@ step 4: client connection
 step 5: server -> client message
 step 6: client -> server message
          -> with input box.
+
+step 7: Broadcasting (wss.clients)
+            client A -> server -> client B and others
+            client B -> server -> client A and others
