@@ -14,6 +14,11 @@ const server = http.createServer(app);
 // webSocket server
 const wss = new webSocket.Server({ server });
 
+// connect client
+wss.on("connection", (socket) => {
+  console.log("new client connected");
+});
+
 server.listen(PORT, () => {
   console.log("Server running...");
 });

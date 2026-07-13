@@ -1,0 +1,4 @@
+step 1: express app
+step 2: http server + server listening
+step 3: webSocket server
+step 4: client connection
