@@ -3,3 +3,4 @@ step 2: http server + server listening
 step 3: webSocket server
 step 4: client connection
 step 5: server -> client message
+step 6: client -> server message

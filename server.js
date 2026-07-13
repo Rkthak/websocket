@@ -19,6 +19,10 @@ wss.on("connection", (socket) => {
   console.log("new client connected");
 
   socket.send("hello client");
+
+  socket.on("message", (message) => {
+    console.log(message.toString());
+  });
 });
 
 server.listen(PORT, () => {
