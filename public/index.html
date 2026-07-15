@@ -27,6 +27,22 @@
       const send = document.getElementById("send");
       const username = document.getElementById("username");
       const chat = document.getElementById("chat");
+      const message = document.getElementById("message");
+
+      const sendMessage = () => {
+        const data = {
+          type: "message",
+          text: message.value,
+        };
+
+        if (message.value.trim() === "") {
+          return;
+        }
+
+        socket.send(JSON.stringify(data));
+
+        message.value = "";
+      };
 
       join.addEventListener("click", () => {
         const data = {
@@ -39,13 +55,13 @@
       });
 
       send.addEventListener("click", () => {
-        const message = document.getElementById("message");
-        const data = {
-          type: "message",
-          text: message.value,
-        };
+        sendMessage();
+      });
 
-        socket.send(JSON.stringify(data));
+      message.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
       });
 
       socket.onmessage = (event) => {
