@@ -15,3 +15,5 @@ Step 6: Client → Server
 step 7: Broadcasting (wss.clients)
             client A -> server -> client B and others
             client B -> server -> client A and others
+
+step 8: userName + message  adding 

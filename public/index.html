@@ -8,6 +8,10 @@
   </head>
   <body>
     <h1>Chat App</h1>
+    <div class="">
+      <input type="text" id="username" placeholder="Enter your name" />
+      <button id="join">Join</button>
+    </div>
 
     <div class="">
       <input type="text" id="message" placeholder="Enter message" />
@@ -17,15 +21,28 @@
     <script>
       const socket = new WebSocket("ws://localhost:3000");
 
+      const join = document.getElementById("join");
       const send = document.getElementById("send");
+      const username = document.getElementById("username");
 
-      socket.onopen = () => {
-        console.log("connected");
-      };
+      join.addEventListener("click", () => {
+        const data = {
+          type: "join",
+          user: username.value,
+        };
+        socket.send(JSON.stringify(data));
+        join.disabled = true;
+        username.disabled = true;
+      });
 
       send.addEventListener("click", () => {
         const message = document.getElementById("message");
-        socket.send(message.value);
+        const data = {
+          type: "message",
+          text: message.value,
+        };
+
+        socket.send(JSON.stringify(data));
       });
 
       socket.onmessage = (event) => {
