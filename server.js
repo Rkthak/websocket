@@ -24,12 +24,23 @@ wss.on("connection", (socket) => {
 
       wss.clients.forEach((client) => {
         if (client !== socket) {
-          client.send(`${socket.name} joined the room`);
+          const joinData = {
+            type: "join",
+            user: socket.name,
+          };
+
+          client.send(JSON.stringify(joinData));
         }
       });
     } else if (data.type === "message") {
+      const messageData = {
+        type: "message",
+        user: socket.name,
+        text: data.text,
+      };
+
       wss.clients.forEach((client) => {
-        client.send(`${socket.name} : ${data.text}`);
+        client.send(JSON.stringify(messageData));
       });
     }
   });

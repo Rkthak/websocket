@@ -65,9 +65,26 @@
       });
 
       socket.onmessage = (event) => {
-        const p = document.createElement("p");
-        p.textContent = event.data;
-        chat.appendChild(p);
+        const data = JSON.parse(event.data);
+
+        if (data.type === "join") {
+          const p = document.createElement("p");
+
+          p.textContent = `${data.user} joined the chat`;
+
+          chat.appendChild(p);
+        } else if (data.type === "message") {
+          const p = document.createElement("p");
+
+          p.textContent = `${data.user} : ${data.text}`;
+
+          chat.appendChild(p);
+          if (data.user === username.value) {
+            p.classList.add("my-message");
+          } else {
+            p.classList.add("other-message");
+          }
+        }
       };
     </script>
   </body>
