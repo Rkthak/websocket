@@ -20,4 +20,6 @@ step 8: userName + message  adding
 step 9: UI for message display
 
 ROOMS ==>
-        client.room === socket.room
+        client.room === socket.room ===> for clients use app.....
+    
+    rooms[socket.room].forEach((client)) ==> time complexity O(n) for the users are in room
