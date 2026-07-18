@@ -15,6 +15,7 @@ const server = http.createServer(app);
 const wss = new webSocket.Server({ server });
 
 // connect client
+const rooms = {};
 wss.on("connection", (socket) => {
   //  broadcast
   socket.on("message", (message) => {
@@ -23,8 +24,16 @@ wss.on("connection", (socket) => {
       socket.name = data.user;
       socket.room = data.room;
 
-      wss.clients.forEach((client) => {
-        if (client !== socket && client.room === socket.room) {
+      if (!rooms[data.room]) {
+        rooms[data.room] = [];
+      }
+
+      rooms[data.room].push(socket);
+
+      console.log(rooms);
+
+      rooms[socket.room].forEach((client) => {
+        if (client !== socket) {
           const joinData = {
             type: "join",
             user: socket.name,
@@ -40,10 +49,8 @@ wss.on("connection", (socket) => {
         text: data.text,
       };
 
-      wss.clients.forEach((client) => {
-        if (client.room === socket.room) {
-          client.send(JSON.stringify(messageData));
-        }
+      rooms[socket.room].forEach((client) => {
+        client.send(JSON.stringify(messageData));
       });
     }
   });
