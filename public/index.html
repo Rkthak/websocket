@@ -8,7 +8,9 @@
   </head>
   <body>
     <h1>Chat App</h1>
+
     <div class="">
+      <input type="text" id="room" placeholder="room name" />
       <input type="text" id="username" placeholder="Enter your name" />
       <button id="join">Join</button>
     </div>
@@ -26,6 +28,7 @@
       const join = document.getElementById("join");
       const send = document.getElementById("send");
       const username = document.getElementById("username");
+      const room = document.getElementById("room");
       const chat = document.getElementById("chat");
       const message = document.getElementById("message");
 
@@ -48,6 +51,7 @@
         const data = {
           type: "join",
           user: username.value,
+          room: room.value,
         };
         socket.send(JSON.stringify(data));
         join.disabled = true;

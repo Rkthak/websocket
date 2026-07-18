@@ -21,9 +21,10 @@ wss.on("connection", (socket) => {
     const data = JSON.parse(message.toString());
     if (data.type === "join") {
       socket.name = data.user;
+      socket.room = data.room;
 
       wss.clients.forEach((client) => {
-        if (client !== socket) {
+        if (client !== socket && client.room === socket.room) {
           const joinData = {
             type: "join",
             user: socket.name,
@@ -40,7 +41,9 @@ wss.on("connection", (socket) => {
       };
 
       wss.clients.forEach((client) => {
-        client.send(JSON.stringify(messageData));
+        if (client.room === socket.room) {
+          client.send(JSON.stringify(messageData));
+        }
       });
     }
   });
