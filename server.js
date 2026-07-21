@@ -30,8 +30,6 @@ wss.on("connection", (socket) => {
 
       rooms[data.room].push(socket);
 
-      console.log(rooms);
-
       rooms[socket.room].forEach((client) => {
         if (client !== socket) {
           const joinData = {
@@ -52,6 +50,31 @@ wss.on("connection", (socket) => {
       rooms[socket.room].forEach((client) => {
         client.send(JSON.stringify(messageData));
       });
+    }
+  });
+
+  socket.on("close", () => {
+    if (!socket.room) {
+      return;
+    }
+
+    // 1. User ko room se remove karo
+    rooms[socket.room] = rooms[socket.room].filter((client) => {
+      return client !== socket;
+    });
+
+    // 2. Room empty hai?
+    if (rooms[socket.room].length > 0) {
+      const leaveData = {
+        type: "leave",
+        user: socket.name,
+      };
+
+      rooms[socket.room].forEach((client) => {
+        client.send(JSON.stringify(leaveData));
+      });
+    } else {
+      delete rooms[socket.room];
     }
   });
 });

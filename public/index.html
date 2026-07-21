@@ -88,6 +88,12 @@
           } else {
             p.classList.add("other-message");
           }
+        } else if (data.type === "leave") {
+          const p = document.createElement("p");
+
+          p.textContent = `${data.user} left the chat`;
+
+          chat.appendChild(p);
         }
       };
     </script>
