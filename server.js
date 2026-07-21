@@ -16,6 +16,7 @@ const wss = new webSocket.Server({ server });
 
 // connect client
 const rooms = {};
+const users = {};
 wss.on("connection", (socket) => {
   //  broadcast
   socket.on("message", (message) => {
@@ -23,6 +24,9 @@ wss.on("connection", (socket) => {
     if (data.type === "join") {
       socket.name = data.user;
       socket.room = data.room;
+
+      // private chat
+      users[socket.name] = socket;
 
       if (!rooms[data.room]) {
         rooms[data.room] = [];
@@ -50,6 +54,29 @@ wss.on("connection", (socket) => {
       rooms[socket.room].forEach((client) => {
         client.send(JSON.stringify(messageData));
       });
+    } else if (data.type === "private") {
+      const receiver = users[data.to];
+
+      if (receiver) {
+        const privateData = {
+          type: "private",
+          from: socket.name,
+          text: data.text,
+        };
+
+        receiver.send(JSON.stringify(privateData));
+
+        if (receiver !== socket) {
+          socket.send(JSON.stringify(privateData));
+        }
+      } else {
+        const errorData = {
+          type: "error",
+          message: `${data.to} is offline`,
+        };
+
+        socket.send(JSON.stringify(errorData));
+      }
     }
   });
 
@@ -76,6 +103,8 @@ wss.on("connection", (socket) => {
     } else {
       delete rooms[socket.room];
     }
+
+    delete users[socket.name];
   });
 });
 

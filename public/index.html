@@ -9,18 +9,41 @@
   <body>
     <h1>Chat App</h1>
 
-    <div class="">
-      <input type="text" id="room" placeholder="room name" />
-      <input type="text" id="username" placeholder="Enter your name" />
-      <button id="join">Join</button>
+    <div>
+      <label>Username:</label>
+      <input id="username" placeholder="Enter username" />
     </div>
 
-    <div class="" id="chat"></div>
+    <br />
 
-    <div class="">
-      <input type="text" id="message" placeholder="Enter message" />
-      <button id="send">Send</button> &nbsp;
+    <div>
+      <label>Room:</label>
+      <input id="room" placeholder="Enter room name" />
     </div>
+
+    <br />
+
+    <div>
+      <label>Send to user:</label>
+      <input id="to" placeholder="Enter receiver username" />
+    </div>
+
+    <br />
+
+    <div>
+      <label>Message:</label>
+      <input id="message" placeholder="Enter message" />
+    </div>
+
+    <br />
+
+    <button id="join">Join Room</button>
+
+    <button id="send">Send Group</button>
+
+    <button id="privateSend">Send Private</button>
+
+    <div id="chat"></div>
 
     <script>
       const socket = new WebSocket("ws://localhost:3000");
@@ -31,6 +54,17 @@
       const room = document.getElementById("room");
       const chat = document.getElementById("chat");
       const message = document.getElementById("message");
+      const privateSend = document.getElementById("privateSend");
+      const to = document.getElementById("to");
+
+      privateSend.addEventListener("click", () => {
+        const data = {
+          type: "private",
+          to: to.value,
+          text: message.value,
+        };
+        socket.send(JSON.stringify(data));
+      });
 
       const sendMessage = () => {
         const data = {
@@ -92,6 +126,12 @@
           const p = document.createElement("p");
 
           p.textContent = `${data.user} left the chat`;
+
+          chat.appendChild(p);
+        } else if (data.type === "private") {
+          const p = document.createElement("p");
+
+          p.textContent = `${data.from} : ${data.text}`;
 
           chat.appendChild(p);
         }
